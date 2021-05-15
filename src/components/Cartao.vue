@@ -8,7 +8,8 @@
         img-top
         tag="article"
         style="max-width:20rem"
-        class="mb-2">
+        class="mb-4"
+        footer="Rodapé">
         <b-card-text>
           Abc isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro
         </b-card-text>
