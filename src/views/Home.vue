@@ -2,7 +2,11 @@
   <div class="home">
     <b-container align="center">
       <b-row align-v="center">
-        <Cartao v-for="cartao in cartoesMostrados" :key="cartao.id" :name="cartao.name">
+        <Cartao
+          v-for="cartao in cartoesMostrados"
+          :key="cartao.id"
+          :name="cartao.name"
+          :id="cartao.id">
         </Cartao>
       </b-row>
         <b-pagination align="center"

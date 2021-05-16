@@ -13,8 +13,13 @@
         <b-card-text>
           Abc isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro isso aquilo outro
         </b-card-text>
-        <b-button variant="primary"> Veja agora!
+        <b-button v-b-modal="modalId" variant="primary" v-b-tooltip.hover title="Clique djá!">
+          Veja agora!
         </b-button>
+        <b-modal :id="modalId" title="Clicou!">
+            <p class="my-4">Obrigado por clicar no cartão {{ modalId }}</p>
+        </b-modal>
+
       </b-card>
     </b-col>
   </div>
@@ -22,7 +27,12 @@
 
 <script>
   export default {
-    props: ["name"]
+    props: ["name", "id"],
+    computed: {
+      modalId(){
+        return 'modal-' + this.id;
+      }
+    }
   }
 </script>
 
