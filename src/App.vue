@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="page" v-if="showSpinner">
+        <b-spinner class="spinner" variant="primary" key="primary"></b-spinner>
+    </div>
     <div id="nav">
       <Navbar/>
       <!-- <router-link to="/">Home</router-link> |
@@ -11,11 +14,15 @@
 
 <script type="text/javascript">
     import Navbar from '@/components/Navbar.vue'
+    import { mapGetters } from 'vuex';
 
     export default {
       components: {
         Navbar
-      }
+      },
+      computed: {
+        ...mapGetters(["showSpinner"])
+      },
     }
 
 </script>
@@ -29,4 +36,16 @@
   color: #2c3e50;
 }
 
+.page {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  position: relative;
+  top: 50%;
+}
 </style>

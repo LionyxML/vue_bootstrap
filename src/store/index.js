@@ -8,6 +8,7 @@ export default new Vuex.Store({
     cartoes: [],
     cartoesMostrados: [],
     rows: 0,
+    showSpinner: false
   },
   mutations: {
     SETA_CARTOES(state, cartoes){
@@ -16,18 +17,23 @@ export default new Vuex.Store({
     SETA_ROWS(state, rows){
       state.rows = rows;
     },
+    SETA_SPINNER(state, showSpinner){
+      state.showSpinner = showSpinner;
+    },
     SETA_CARTOES_MOSTRADOS(state, cartoesMostrados){
       state.cartoesMostrados = cartoesMostrados;
     }
   },
   actions: {
-    async pegaDados(){
+    async pegaDados( { commit } ){
+      commit("SETA_SPINNER", true);
       return new Promise (resolve => {
         setTimeout(async () => {
           const res = await fetch("dados.json");
           const val = await res.json();
           resolve(val);
-        }, 2000)
+          commit("SETA_SPINNER", false);
+        }, 1000)
       })
     },
     async pegaCartoes({ dispatch, commit }){
@@ -41,6 +47,22 @@ export default new Vuex.Store({
       const start = (currentPage - 1 ) * perPage;
       const cartoes = state.cartoes.slice(start, start + 3);
       commit("SETA_CARTOES_MOSTRADOS", cartoes);
+    },
+    updatePagination({commit, dispatch}, { myJson, perPage, currentPage }) {
+      commit("SETA_CARTOES", myJson);
+      commit("SETA_ROWS", myJson.length);
+      dispatch("paginate", { currentPage, perPage });
+    },
+    async search( { dispatch }, { text }){
+      const myJson = await this.dispatch("pegaDados");
+      const values = myJson.filter(val =>
+        val.name.toLowerCase().includes(text.toLowerCase())
+      );
+      dispatch("updatePagination", {
+        myJson: values,
+        currentPage: 1,
+        perPage: 3
+      });
     }
   },
   modules: {
@@ -54,6 +76,9 @@ export default new Vuex.Store({
     },
     cartoesMostrados(state) {
       return state.cartoesMostrados;
+    },
+    showSpinner(state) {
+      return state.showSpinner;
     }
   }
 })
