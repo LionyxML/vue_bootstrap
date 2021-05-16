@@ -21,41 +21,36 @@
 </template>
 
 <script>
-import Cartao from '@/components/Cartao.vue'
+import Cartao from '@/components/Cartao.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
   components: {
     Cartao
   },
+  computed: {
+    ...mapGetters(["cartoes", "cartoesMostrados", "rows"])
+  },
   mounted() {
     this.fetchData();
   },
   data() {
     return {
-      cartoes: [],
-      cartoesMostrados: [],
       currentPage: 1,
-      rows: 1,
       perPage: 3
     }
   },
   methods: {
     async fetchData(){
       try {
-        const res = await fetch("dados.json");
-        const val = await res.json();
-        this.cartoes = val;
-        this.cartoesMostrados = val.splice(0, 3);
-        this.rows = this.cartoes.length;
-        console.log(val);
+        await this.$store.dispatch("pegaCartoes");
       } catch (err) {
         console.log(err);
       }
     },
     paginate(currentPage) {
-      const start = (currentPage - 1) * this.perPage;
-      this.cartoesMostrados = this.cartoes.slice(start, start+3);
+      this.$store.dispatch("paginate", { currentPage, perPage: this.perPage })
     }
   }
 }
